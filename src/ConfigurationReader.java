@@ -34,4 +34,17 @@ public abstract class ConfigurationReader {
 
     public abstract void load();
 
+    protected boolean skipLine(String line) {
+        String firstCharacter = line.substring(0,1);
+
+        if(line.isEmpty()){
+            return true;
+
+        } else if(firstCharacter == "#") {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 }
