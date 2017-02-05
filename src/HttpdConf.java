@@ -1,13 +1,19 @@
-import java.io.*;
 
 
-public class HttpdConf {
-	//PRIVATE
+public class HttpdConf extends ConfiguarationReader {
+
     private Dictionary aliases;
     private Dictionary scriptAliases;
-    //-etc ?
 
-    //PUBLIC
-    public HttpdConf( String fileName );
+
+    /
+    public HttpdConf(String fileName)
+    {
+        super(fileName);
+        aliases = new Dictionary
+
+
+    }
+
     public void load();
 }
