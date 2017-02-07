@@ -8,7 +8,7 @@ public class HttpdConf extends ConfiguarationReader {
     private String serverRoot = null;
     private String documentRoot = null;
     private String logFile = null;
-    private String AccessFileName = null;
+    private String AccessFileName = null};
 
     private int listen = -1;
 
