@@ -1,50 +1,44 @@
-/**
- * Created by euphoric on 2/4/17.
- */
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public abstract class ConfigurationReader {
 
-    private File file;
-    private BufferedReader bufferedReader = null;
+    protected File file;
+    protected BufferedReader br;
 
-    public ConfigurationReader(String fileName)
-    {
-        String path = "~/WebServerProject/config/" + fileName;
-        file = new File(path);
-        bufferedReader = new BufferReader(new FileReader(file));
+    public ConfigurationReader(){
+
     }
 
-    public boolean hasMoreLines()
-    {
-        if(bufferedReader.nextLine() != -1){
-            return true;
-        } else {
-            return false;
-        }
+    public boolean hasMoreLines() throws IOException{
+        int BUFFER_SIZE = 2500;
+        br.mark(BUFFER_SIZE);
+        if(br.readLine() != null) {
+            br.reset();
+            return true; }
+        else{
+            br.reset();
+            return false; }
     }
 
-    public String nextLine()
-    {
-        return bufferedReader.nextLine();
-    }
+    protected String nextLine() throws IOException{
+        try{
+            return br.readLine();
 
+        } catch (IOException e) { e.printStackTrace(); }
+        return null;
+    }
 
     public abstract void load();
 
-    protected boolean skipLine(String line) {
-        String firstCharacter = line.substring(0,1);
+    public ConfigurationReader(String fileName) throws IOException{}
 
-        if(line.isEmpty()){
-            return true;
 
-        } else if(firstCharacter == "#") {
-            return true;
-
-        } else {
-            return false;
-        }
-    }
 }

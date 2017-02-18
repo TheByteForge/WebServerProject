@@ -1,15 +1,16 @@
 import java.io.*;
+import java.util.Dictionary;
 
 
-public class Htpassword {
-	//PRIVATE
-    private Dictionary users;
-    //
-
-
-
-
-
-    public void load();
-    public boolean isAuthorized(String username, String password);
-}
+//public class Htpassword extends ConfigurationReader{
+//	private Dictionary users;
+//
+//	public boolean isAuthorized(String username, String password){
+//
+//		return false;
+//	}
+//
+//	public void load(){
+//
+//	}
+//}
