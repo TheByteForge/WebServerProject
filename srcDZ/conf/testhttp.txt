@@ -1,0 +1,5 @@
+GET /C:/cgi-bin/ http-1.0
+Headers: Fuck me
+Content-Length: 5000
+Analbeads: Yes
+END
