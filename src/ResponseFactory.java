@@ -1,10 +1,10 @@
-/**
- * Created by euphoric on 2/3/17.
- */
+package com.company;
+
 public class ResponseFactory {
 
-    public Response getResponse(Request request, Resource resource){
-       Response response = new Response(resourse);
-    }
-}
+//    public Response getResponse(Request request, Resource resource){
+//
+//        if
+//    };
 
+}

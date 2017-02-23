@@ -1,3 +1,5 @@
+package com.company;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,6 +14,9 @@ public abstract class ConfigurationReader {
 
     protected File file;
     protected BufferedReader br;
+    protected String [] currentLine = {""};
+    FileInputStream inputStream;
+
 
     public ConfigurationReader(){
 

@@ -1,50 +1,92 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import java.util.stream.Stream;
+package com.company;
 
+import java.io.*;
+import java.util.*;
 
+/**
+ * Created by DORIS on 2/17/2017.
+ */
 public class Request {
-    private String uri;
-    //private body;
-    private String verb;
-    private String httpVersion;
-    private Dictionary <String, String> directoryIndex = new Hashtable<>();
-    private BufferedReader br;
 
-    protected String [] currentLine = {""};
+    private static String uri;
+    private static String verb;
+    private static String httpVersion;
+    private HashMap <String, List<String>> headers = new HashMap<>();
+    private DataInputStream requestIn;
+    private InputStream inStream;
+    protected String [] currentLine = null;
+    private ArrayList<String> strArray = new ArrayList<>();
 
-    public Request(InputStream is)throws IOException{
 
-        //Defintes buffered reader from passed in stream (is)
-            br = new BufferedReader(new InputStreamReader(is));
 
-            String tempLine;
-            tempLine = br.readLine();
-            currentLine = tempLine.split("\\\\");
-
-            //Testing to make sure it splits correctly
-            System.out.println(currentLine[0] + currentLine[1] + currentLine[2]);
-            verb = currentLine[0];
-            uri = currentLine[1];
-            httpVersion = currentLine[2];
-
-            if(currentLine[0].equals("GET")){
-                //GET COMMAND
-            }
-            else if(currentLine[0].equals("PUT")){
-                //PUT COMMAND
-            }
-
+    public Request(InputStream client)throws IOException{
+        inStream = client;
+        requestIn = new DataInputStream(inStream);
     }
+
     public void parse(){
+        try {
+            String s = null;
+            StringBuilder sb = new StringBuilder();
+            int strCounter = 0;
+
+
+            while((s = requestIn.readLine()) != null){
+
+                System.out.print("This is the string : " + s +"\n");
+                strArray.add(s);
+                System.out.print(strCounter + " : " + strArray.get(strCounter) +"\n");
+
+                sb.append(s+ " ");
+                strCounter++;
+            }
+            for (String e : strArray) {
+                System.out.print(e + "\n");
+                System.out.print("IN StraArry print loop\n");
+            }
+//            System.out.print(sb.toString() + "\n");
+//            List<String> headerList = new ArrayList<>();
+//            int count = 0;
+//            String line = brReq.readLine();
+
+//            while (line != null) {
+//
+//                currentLine = line.split("\\s+");
+//                if(count == 0) {
+//
+//                    verb = currentLine[0];
+//                    uri = currentLine[1];
+//                    System.out.println("This is the uri in the general Request Class Instance :" + uri);
+//                    httpVersion = currentLine[2];
+//                    count = 1;
+//                }
+//                else{
+////                    System.out.println(currentLine[0] + currentLine[1] + currentLine[2]);
+//
+//                    for(int i = 1; i < currentLine.length; i++) {
+//                            headerList.add(currentLine[i].replaceAll("\\s+", ""));
+//
+//                    }
+//                    headers.put(currentLine[0], headerList);
+//                }
+//                line = brReq.readLine();
+//                System.out.println(Arrays.asList(headers));
+//                headerList = new ArrayList<>();
+//
+//
+//
+//            }
+            requestIn.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error: Request Parsing Issue!");
+        }
 
     }
-    public String getUri(){
+
+
+    public static String getURI(){
         return uri;
     }
     public String getVerb(){
@@ -53,14 +95,20 @@ public class Request {
     public String getHttpVersion(){
         return httpVersion;
     }
+
     public static void main(String [] args){
-//        try {
-//            String test = "GET\\google.com\\http/1.1";
-////            Request r = new Request(test);
-//        }catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
 
+            String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\testhttp.txt";
+            File file = new File(confPath);
+            InputStream inputStream = new FileInputStream(file);
+            Request request = new Request(inputStream);
+            request.parse();
+
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Request Test Failed");
+        }
     }
-
 }
+

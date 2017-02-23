@@ -1,4 +1,5 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+package com.company;
+
 
 import java.io.*;
 import java.util.Arrays;
@@ -7,17 +8,32 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 
-public class MimesTypes extends ConfigurationReader{
-	private HashMap<String, String> types = new HashMap<>();
-    protected String [] currentLine = {""};
-	public MimesTypes(){}
+public class MimesTypes extends ConfigurationReader {
+    private HashMap<String, String> types = new HashMap<>();
 
-    public MimesTypes(String fileName)throws IOException{
+    public MimesTypes() {
+    }
 
-        String confPath = "C:\\Users\\Zack\\Desktop\\DZWS\\conf\\";
+    public MimesTypes(String fileName) throws IOException {
+        super(fileName);
+        String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\";
         file = new File(confPath + fileName);
-        FileInputStream inputStream = new FileInputStream(file);
+        inputStream = new FileInputStream(file);
+
         br = new BufferedReader(new InputStreamReader(inputStream));
+
+    }
+
+    public String lookup(String extension) {
+
+        if (types.containsKey(extension)) {
+            return types.get(extension);
+        } else {
+            return null;
+        }
+    }
+
+    public void load() {
 
         try {
             while (hasMoreLines()) {
@@ -25,11 +41,11 @@ public class MimesTypes extends ConfigurationReader{
                 String line = nextLine();
 
                 //Disregard anything after a #
-                if(!line.contains("#")) {
+                if (!line.contains("#")) {
                     //Split by spaces
                     currentLine = line.split("\\s+");
                     //If NO EXTENSIONS add path to map, then a "default" string
-                    if(currentLine.length == 1){
+                    if (currentLine.length == 1) {
                         types.put(currentLine[0], null);
                     }
                     //If there IS AN EXTENSION, add the unique extension then the path
@@ -41,30 +57,26 @@ public class MimesTypes extends ConfigurationReader{
                 }
 
             }
-            System.out.println(Arrays.asList(types));
+            System.out.println("MimeType creation worked!");
+
         } catch (IOException e) {
-        e.printStackTrace();
-        }
-	}
-
-	public String lookup(String extension) {
-
-        if (types.containsKey(extension)) {
-            return types.get(extension);
-        }
-        else{
-            return null;
-        }
-    }
-
-	public void load(){}
-
-	public static void main(String [] args){
-	    try {
-            MimesTypes mt = new MimesTypes("mime.types");
-        }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public HashMap getTypes(){
+        return types;
+    }
+
+    public static void main(String[] args) {
+        try {
+            MimesTypes mt = new MimesTypes("mime.types");
+            mt.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error: Mimetypes is not working...");
+        }
 
     }
+
 }
