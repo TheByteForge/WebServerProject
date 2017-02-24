@@ -15,7 +15,7 @@ public abstract class ConfigurationReader {
     protected File file;
     protected BufferedReader br;
     protected String [] currentLine = {""};
-    FileInputStream inputStream;
+    protected FileInputStream inputStream;
 
 
     public ConfigurationReader(){

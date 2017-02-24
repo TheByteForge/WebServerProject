@@ -13,7 +13,7 @@ public class TesterClient {
     public static void main(String[] args) throws IOException {
 
         for (int i = 0; i < 1; i++) {
-            Socket socket = new Socket("localhost", 2050);
+            Socket socket = new Socket("localhost", 2111);
 
             sendMessage(socket, i);
 //            readResponse( socket );
@@ -24,19 +24,24 @@ public class TesterClient {
     }
 
     public static void sendMessage(Socket socket, int counter) throws IOException {
-        PrintWriter outSocket = new PrintWriter(socket.getOutputStream(), true);
+
+
         String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\testhttp.txt";
         File file = new File(confPath);
-        InputStream inputStream = new FileInputStream(file);
-        BufferedReader tempBR = new BufferedReader(new InputStreamReader(inputStream));
+        InputStream inputFileStream = new FileInputStream(file);
+        DataInputStream is = new DataInputStream(inputFileStream);
+
+        DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+
+
 
         String tempMessage;
 
-        while((tempMessage = tempBR.readLine()) != null){
+        while((tempMessage = is.readLine()) != null){
 
 //            System.out.print(tempMessage + "\n");
-            outSocket.print(tempMessage);
-            outSocket.flush();
+            os.writeChars(tempMessage);
+            os.flush();
 
         }
 

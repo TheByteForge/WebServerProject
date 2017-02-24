@@ -12,31 +12,60 @@ public class Request {
     private static String verb;
     private static String httpVersion;
     private HashMap <String, List<String>> headers = new HashMap<>();
-    private BufferedReader brReq;
+    private DataInputStream requestIn;
+    private InputStream inStream;
     protected String [] currentLine = null;
+    protected String [] tempLine = null;
+    private ArrayList<String> strArray = new ArrayList<>();
+
 
 
     public Request(InputStream client)throws IOException{
-        brReq = new BufferedReader(new InputStreamReader(client));
-        System.out.println("\nHERE! After this, the brReq.readline() should immediately send out the GET verb! \n");
-        System.out.println(brReq.readLine());
+        inStream = client;
+        requestIn = new DataInputStream(inStream);
     }
 
     public void parse(){
         try {
+//            StringBuilder sb = new StringBuilder();
+//            int strCounter = 0;
+
+
+//            while((s = requestIn.readLine()) != null){
+//
+//                System.out.print("This is the string : " + s +"\n");
+//                strArray.add(s);
+//                System.out.print(strCounter + " : " + strArray.get(strCounter) +"\n");
+//
+//                sb.append(s+ " ");
+//                strCounter++;
+//            }
+//            for (String e : strArray) {
+//                System.out.print(e + "\n");
+//                System.out.print("IN StraArry print loop\n");
+//            }
+//            System.out.print(sb.toString() + "\n");
+
+            String s;
             List<String> headerList = new ArrayList<>();
             int count = 0;
-            String line = brReq.readLine();
 
-            while (line != null) {
 
-                currentLine = line.split("\\s+");
+            while ((s = requestIn.readLine()) != null && s.length() !=0) {
+
+//                System.out.print("This is the original StringLine : " + s +"\n");
+                currentLine = s.split("\\s");
                 if(count == 0) {
 
+
                     verb = currentLine[0];
+
                     uri = currentLine[1];
-                    System.out.println("This is the uri in the general Request Class Instance :" + uri);
                     httpVersion = currentLine[2];
+                    System.out.println("This is the VERB in the general Request Class Instance : " + verb);
+                    System.out.println("This is the URI in the general Request Class Instance : " + uri);
+                    System.out.println("This is the HTTP Version in the general Request Class Instance : " + httpVersion);
+
                     count = 1;
                 }
                 else{
@@ -48,14 +77,13 @@ public class Request {
                     }
                     headers.put(currentLine[0], headerList);
                 }
-                line = brReq.readLine();
-                System.out.println(Arrays.asList(headers));
+
+//                System.out.println(Arrays.asList(headers) + "\n");
                 headerList = new ArrayList<>();
 
-
-
             }
-            brReq.close();
+            requestIn.close();
+            System.out.println("This is the End of the Request!\n");
 
         }catch (Exception e){
             e.printStackTrace();
@@ -65,15 +93,14 @@ public class Request {
     }
 
 
-    public static String getURI(){
+    public String getURI(){
         return uri;
     }
     public String getVerb(){
         return verb;
     }
-    public String getHttpVersion(){
-        return httpVersion;
-    }
+    public String getHttpVersion(){ return httpVersion; }
+    public HashMap getHeaders(){ return headers; }
 
     public static void main(String [] args){
         try {

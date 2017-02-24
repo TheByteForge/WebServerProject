@@ -8,7 +8,7 @@ import java.security.MessageDigest;
  */
 public class Htaccess extends ConfigurationReader {
 
-//    Htpassword userFile;
+    Htpassword userFile;
     String authType = null;
     String authName = null;
     String require = null;
@@ -17,9 +17,8 @@ public class Htaccess extends ConfigurationReader {
 
     public Htaccess(String fileName)throws IOException{
         super(fileName);
-        String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\";
-        file = new File(confPath + fileName);
-        FileInputStream inputStream = new FileInputStream(file);
+        file = new File(fileName);
+        inputStream = new FileInputStream(file);
         br = new BufferedReader(new InputStreamReader(inputStream));
 
     }
@@ -30,22 +29,30 @@ public class Htaccess extends ConfigurationReader {
 
             while (hasMoreLines()) {
                 String tempLine = nextLine();
-                currentLine = tempLine.split("\\s+");
+                currentLine = tempLine.replaceAll("\"","").split("\\s+");
                 if(currentLine[0] != "#" && currentLine[0] != " "){
                     switch (currentLine[0]) {
                         case "AuthUserFile":
-//                            userFile = new Htpassword(currentLine[1]);
+                            userFile = new Htpassword(currentLine[1]);
+                            userFile.load();
                             System.out.println(currentLine[1]);
                             break;
                         case "AuthType":
                             authType = currentLine[1];
                             System.out.println(currentLine[1]);
                             break;
-                            //AUTHNAME Is flawed... "I Challenge You" is delimited by the first space "I_
-                            //Need Fix!
                         case "AuthName":
-                            authName = currentLine[1];
-                            System.out.println(currentLine[1]);
+                            authName = currentLine[1] + " ";
+                            for (int i = 2; i < currentLine.length; i++) {
+                                if(i == currentLine.length-1){
+                                    authName = authName + currentLine[i];
+                                }
+                                else{
+                                    authName = authName + currentLine[i] + " ";
+                                }
+
+                            }
+                            System.out.println(authName);
                             break;
                         case "Require":
                             require = currentLine[1];
@@ -61,9 +68,20 @@ public class Htaccess extends ConfigurationReader {
         }
     }
 
-    boolean isAuthorized(String username, String password) {
+    public boolean isAuthorized(String userName, String userPass) {
+
+        System.out.println("AuthInfo: " + authInfo);
+        String credentials = new String(Base64.getDecoder().decode(authInfo),
+                Charset.forName("UTF-8"));
+
+        String[] tokens = credentials.split(":");
+
+//        String hashPass;
+        String[] data = null;
+//        if(authName == userFile.getUser() &&  hashPass == userFile.getHashPass())
 
         try {
+
 
         return true;
         } catch (Exception e) {
@@ -74,7 +92,7 @@ public class Htaccess extends ConfigurationReader {
 
     public static void main(String []args){
         try {
-            Htaccess ht = new Htaccess("_.htaccess");
+            Htaccess ht = new Htaccess("C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\public_html\\.htaccess");
             ht.load();
         }catch(IOException e){
             e.printStackTrace();

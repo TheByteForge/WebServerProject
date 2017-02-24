@@ -16,8 +16,8 @@ public class MimesTypes extends ConfigurationReader {
 
     public MimesTypes(String fileName) throws IOException {
         super(fileName);
-        String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\";
-        file = new File(confPath + fileName);
+
+        file = new File (fileName);
         inputStream = new FileInputStream(file);
 
         br = new BufferedReader(new InputStreamReader(inputStream));

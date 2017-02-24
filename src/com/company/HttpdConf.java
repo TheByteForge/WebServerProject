@@ -13,20 +13,15 @@ public class HttpdConf extends ConfigurationReader{
     private String accessFileName = null;
     private HashMap <String, String> directoryIndex = new HashMap<>();
 
-
-
     public HttpdConf (){}
 
     public HttpdConf(String fileName)throws IOException{
 
-        //Change depending on server file in particular system
-        String confPath = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\";
-        file = new File(confPath + fileName);
+        file = new File(fileName);
         inputStream = new FileInputStream(file);
         br = new BufferedReader(new InputStreamReader(inputStream));
 
     }
-
 
     //Attempts to load httpdconf file into server memory variables
     public void load() {
@@ -42,7 +37,7 @@ public class HttpdConf extends ConfigurationReader{
                     for (int i = 1; i < currentLine.length; i++) {
                         switch (currentLine[0]) {
                             case "ServerRoot":
-                                serverRoot = currentLine[1];
+                                serverRoot = currentLine[1].replace("\"", "");
 //                                System.out.print(serverRoot + "\n");
                                 break;
                             case "Listen":
@@ -50,21 +45,21 @@ public class HttpdConf extends ConfigurationReader{
 //                                System.out.print(listen + "\n");
                                 break;
                             case "DocumentRoot":
-                                documentRoot = currentLine[1];
+                                documentRoot = currentLine[1].replace("\"", "");
 //                                System.out.print(documentRoot + "\n");
                                 break;
                             case "LogFile":
-                                logFile = currentLine[1];
+                                logFile = currentLine[1].replace("\"", "");
 //                                System.out.print(logFile + "\n");
                                 break;
                             case "Alias":
-//                                alias.put(currentLine[1], currentLine[2]);
+                                alias.put(currentLine[1].replace("/", ""), currentLine[2].replace("\"", ""));
                                 break;
                             case "ScriptAlias":
-//                                scriptAliases.put(currentLine[1], currentLine[2]);
+                                scriptAliases.put(currentLine[1].replace("/", ""), currentLine[2].replace("\"", ""));
                                 break;
                             case "AccessFilename":
-                                accessFileName = currentLine[1];
+                                accessFileName = currentLine[1].replace("\"", "");
                                 break;
                             case "DirectoryIndex":
                                 directoryIndex.put(currentLine[1], currentLine[2]);
@@ -94,8 +89,15 @@ public class HttpdConf extends ConfigurationReader{
     public String getLogFile(){ return logFile; }
     public HashMap getAlias(){ return alias; }
     public HashMap getScriptAlias(){ return scriptAliases;}
-    public HashMap getDirectoryIndex(){ return directoryIndex; }
     public String getAccessFileName(){ return accessFileName; }
+    public String getDirectoryIndex() {
+        if (directoryIndex.isEmpty()) {
+            return "\\index.html";
+        }
+        else{
+            return directoryIndex.get("DirectoryIndex");
+        }
+    }
 
     public static void main(String [] args){
         try {
