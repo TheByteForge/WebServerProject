@@ -55,7 +55,8 @@ public class Request {
                     headers.put(currentLine[0], headerList);
                 }
 
-                System.out.println(Arrays.asList(headers) + "\n");
+                //Testing Print!
+//                System.out.println(Arrays.asList(headers) + "\n");
                 headerList = new ArrayList<>();
 
             }

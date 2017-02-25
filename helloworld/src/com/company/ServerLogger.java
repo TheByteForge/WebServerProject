@@ -27,13 +27,17 @@ public class ServerLogger {
     private static final Logger logger = Logger.getLogger( ServerLogger.class.getName() );
     FileHandler fh;
 
-    public void ServerLogger(String fileName)throws IOException{
-        String tempFile = fileName;
-        fh = new FileHandler(tempFile);
-        SimpleFormatter formatter = new SimpleFormatter();
-        logger.addHandler(fh);
-        fh.setFormatter(formatter);
-        System.out.println("Constructor called to create: " + tempFile);
+    ServerLogger(String fileName){
+        try {
+            String tempFile = fileName;
+            fh = new FileHandler(tempFile);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(fh);
+            fh.setFormatter(formatter);
+            System.out.println("Constructor called to create: " + tempFile);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 

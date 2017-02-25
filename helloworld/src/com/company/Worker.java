@@ -16,13 +16,16 @@ public class Worker extends Thread {
     private Socket workSocket;
     private MimesTypes workMimes;
     private HttpdConf workConfig;
-    private static byte [] bufferBytes = new byte[84*1024];
+    public String passLogFile;
+
+//    private static byte [] bufferBytes = new byte[84*1024];
     private ResponseFactory rf = new ResponseFactory();
 
     public Worker(Socket socket, HttpdConf config, MimesTypes mimes){
             workSocket = socket;
             workMimes = mimes;
             workConfig = config;
+            passLogFile = "C:\\Users\\DORIS\\Documents\\Programming_WEB_CPP_JAVA\\DZ_WebServer\\WebServerProject-TheByteForge-DZSRC-Testing\\srcDZ\\conf\\logfile";
     }
 
     @Override
@@ -33,7 +36,12 @@ public class Worker extends Thread {
             Request userReq = new Request(workSocket.getInputStream());
             userReq.parse();
             Resource workerResource = new Resource(userReq.getURI(), workConfig);
-            rf.getResponse(userReq, workerResource, workSocket.getOutputStream());
+            Response newResp = rf.getResponse(userReq, workerResource, workSocket.getOutputStream());
+            System.out.print("Does it make the response ocrectly?\n");
+            newResp.send(workSocket.getOutputStream());
+//            ServerLogger sl = new ServerLogger(passLogFile);
+//            sl.write(userReq, newResp);
+
             System.out.print("Is This Request a SCRIPTALIASED : " + workerResource.isScriptAliased() + "\n");
             System.out.print("Is This Request a ALIASED? : " + workerResource.isAliased() + "\n");
             System.out.print("This is the ABSOLUTE PATH : " + workerResource.absolutePath() + "\n");

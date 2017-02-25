@@ -13,7 +13,6 @@ public class BadRequestResponse extends Response{
 
     }
 
-    @Override
     void send(OutputStream out) {
 
     }

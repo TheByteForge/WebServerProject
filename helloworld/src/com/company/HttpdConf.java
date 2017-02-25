@@ -99,14 +99,14 @@ public class HttpdConf extends ConfigurationReader{
         }
     }
 
-    public static void main(String [] args){
-        try {
-            HttpdConf hc = new HttpdConf("httpd.conf");
-            hc.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public static void main(String [] args){
+//        try {
+//            HttpdConf hc = new HttpdConf("httpd.conf");
+//            hc.load();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 }

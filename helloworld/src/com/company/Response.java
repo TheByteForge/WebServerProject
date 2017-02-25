@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,47 +16,34 @@ public abstract class Response {
     protected String reasonPhrase = "";
     protected Resource responseResource;
     protected DataOutputStream responseOut;
-    private HashMap <String, List<String>> responseHeaders = new HashMap<>();
+    protected File tempLogFile;
+    protected File serverFile;
+    protected HashMap <String, List<String>> responseHeaders = new HashMap<>();
+    protected List<String> keyValues = null;
 
 
     public Response(){}
 
     abstract void send(OutputStream out);
 
-    public void getGenHeaders(){
+    public void getGeneralHeaders(){
+
+        keyValues = new ArrayList<>();
+
         Date date = new Date();
-        List<String> keyValues = new ArrayList<>();
         keyValues.add(date.toString());
-        String s = "Date : ";
-        responseHeaders.put(s, keyValues);
+        responseHeaders.put("Date: ", keyValues);
+
+
         keyValues.clear();
+
+        keyValues = new ArrayList<>();
+
         keyValues.add("Derek & Zack");
-        responseHeaders.put("Server Owners : ", keyValues);
+        responseHeaders.put("Server Owners: ", keyValues);
+        keyValues.add(date.toString());
+        responseHeaders.put("Date: ", keyValues);
     }
-    public void getGETHeaders(){
-        String tempS;
-        List<String> tempList = new ArrayList<>();
-        String [] tempSArr;
-        tempS = "Transfer-Encoding: Chunked";
-        tempSArr = tempS.split(" ");
-        tempList.add(tempSArr[1]);
-//        responseHeaders.put(tempSArr[0], tempList.);
-
-
-
-
-    }
-    public void getDELHeaders(){
-
-    }
-    public void getHEADHeaders(){
-
-    }
-    public void getPUTHeaders(){
-
-    }
-
-
 
     public int getCode(){ return code; }
     public String getReasonPhrase(){ return reasonPhrase; }
